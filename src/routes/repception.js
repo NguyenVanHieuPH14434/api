@@ -1,6 +1,8 @@
 import express from "express";
 import urid from "urid";
 import { client, dbName, url } from "../database/db.js";
+import { number } from "../database/rand.js";
+// import number from "../database/db.js"
 
 const router = express.Router();
 //get
@@ -12,7 +14,7 @@ router.get('/', async(req, res) => {
         filter.user_id = req.query.user_id;
     }
 
-    const data = await client.db(dbName).collection('re').find(filter).toArray();
+    const data = await client.db(dbName).collection('patient').find(filter).toArray();
 
     return res.status(200).json(data);
 })
@@ -22,8 +24,9 @@ router.post('/', async(req, res) => {
     const data = req.body;
     const number = '123456789';
     data.user_id = urid(12, number);
+    // data.user_id = number(12);
 
-    const newCustomer = await client.db(dbName).collection('re').insertOne({
+    const newCustomer = await client.db(dbName).collection('patient').insertOne({
         user_id: data.user_id,
         user_name: data.user_name,
         user_birthday: data.user_birthday,
@@ -54,7 +57,7 @@ router.post('/', async(req, res) => {
 router.get('/:id', async(req, res) => {
     let param = req.params;
 
-    const data = await client.db(dbName).collection('re').findOne({ user_id: param.id });
+    const data = await client.db(dbName).collection('patient').findOne({ user_id: param.id });
 
     return res.status(200).json(data);
 });
@@ -65,7 +68,7 @@ router.post('/:user_id', async(req, res) => {
     const data = req.body;
     const param = req.params;
 
-    const updateCustomer = await client.db(dbName).collection('re').updateOne({ user_id: param.user_id }, {
+    const updateCustomer = await client.db(dbName).collection('patient').updateOne({ user_id: param.user_id }, {
         $set: {
             user_name: data.user_name,
             user_birthday: data.user_birthday,
@@ -95,7 +98,7 @@ router.post('/:user_id', async(req, res) => {
 
 //delete
 router.delete('/:user_id', async(req, res) => {
-    const deleteCustomer = await client.db(dbName).collection('re').deleteOne({ user_id: req.params.user_id });
+    const deleteCustomer = await client.db(dbName).collection('patient').deleteOne({ user_id: req.params.user_id });
     return res.json(deleteCustomer);
 });
 
