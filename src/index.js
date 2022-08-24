@@ -8,10 +8,8 @@ import urid from "urid";
 import crypto from "crypto";
 import ReceptionRouter from "./routes/repception.js";
 import XrayRouter from "./routes/customer_result.js";
-
-const url = 'mongodb+srv://bv_dev:bv123456@bv.jmrzod0.mongodb.net/?retryWrites=true&w=majority';
-const client = new MongoClient(url);
-const dbName = 'bv';
+import { client } from "./database/db.js";
+import dayjs from "dayjs";
 const PORT = 4000;
 
 const app = express();
@@ -29,6 +27,12 @@ const main = async() => {
     app.use(express.json());
     app.use(cors());
 
+
+    // app.get('/', (req, res) => {
+    //         const today = dayjs();
+    //         const randomUser_id = today.format("YYMMDDhmmss");
+    //         res.send(randomUser_id);
+    //     })
     app.use('/api/recep', ReceptionRouter);
     app.use('/api/xray', XrayRouter);
 
